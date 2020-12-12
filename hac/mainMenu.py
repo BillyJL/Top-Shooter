@@ -2,6 +2,7 @@ import pygame
 import random
 from Player import Player
 from Enemy import Enemy
+from Coin import Coin
 
 pygame.init()
 
@@ -16,6 +17,7 @@ healthRender = healthFont.render('z', True, pygame.Color('red'))
 done = False
 hero = pygame.sprite.GroupSingle(Player(screen.get_size()))
 enemies = pygame.sprite.Group()
+coins = pygame.sprite.Group()
 lastEnemy = 0
 score = 0
 clock = pygame.time.Clock()
@@ -57,9 +59,23 @@ def move_entities(hero, enemies, timeDelta):
         proj.move(screen.get_size(), timeDelta)
         enemiesHit = pygame.sprite.spritecollide(proj, enemies, True)
         if enemiesHit:
+            coinChance = random.random()
+            coinPosX = proj.pos[0]
+            coinPosY = proj.pos[1]
             proj.kill()
-            score += len(enemiesHit)
+            if coinChance < 0.25:
+                coins.add(Coin((coinPosX, coinPosY)))
     return score
+
+def coinUp(hero, coins):
+    value = 0
+    for coin in coins:
+        reachCoin = pygame.sprite.spritecollide(coin, hero, False)
+        if reachCoin:
+            coin.kill()
+            value += 1
+            print(money)
+    return value
 
 def render_entities(hero, enemies):
     hero.sprite.render(screen)
@@ -69,6 +85,8 @@ def render_entities(hero, enemies):
         proj.render(screen)
     for enemy in enemies:
         enemy.render(screen)
+    for coin in coins:
+        coin.render(screen)
 
 def button(x, y, w, h, action = None):
     click = pygame.mouse.get_pressed()
