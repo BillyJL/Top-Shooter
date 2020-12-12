@@ -87,19 +87,27 @@ def render_entities(hero, enemies):
     for coin in coins:
         coin.render(screen)
 
-def button(x, y, w, h, action = None):
+def draw_text(text, textcolor,  x, y, fsize):
+    font = pygame.font.SysFont('arial', fsize)
+    text = font.render(text, True, textcolor)
+    text_rect = text.get_rect()
+    text_rect.center = (x, y)
+    screen.blit(text, text_rect)
+
+def button(color, activatedColor, text, x, y, w, h, action = None):
     click = pygame.mouse.get_pressed()
     mopos = pygame.mouse.get_pos()
     pygame.draw.rect(screen, (0, 0, 0), (x, y, w, h))
-    pygame.draw.rect(screen, (128, 128, 128), (x+2, y+2, w-4, h-4))
+    pygame.draw.rect(screen, color, (x+2, y+2, w-4, h-4))  
     if x <= mopos[0] <= (x+w) and y <= mopos[1] <= (y+h):
         pygame.draw.rect(screen, (0, 0, 0), (x, y, w, h))
-        pygame.draw.rect(screen, (230, 230, 230), (x+2, y+2, w-4, h-4))
+        pygame.draw.rect(screen, activatedColor, (x+2, y+2, w-4, h-4))
         if click[0] == 1 and action != None:
             if action == "play":
                 exec(open('main.py').read())
             elif action == "exit":
                 quit()
+    draw_text(text, (0, 0, 0), (x+(w-len(text))/2), (y+27), 30)
 
 while True:
     click = pygame.mouse.get_pressed()
@@ -107,6 +115,6 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
                 quit()
-    button(150, 450, 200, 60, "play")
-    button(450, 450, 200, 60, "exit")
+    button((0, 153, 0),(0, 255, 0), 'start', 150, 450, 200, 60, "play")
+    button((153, 0, 0), (255, 0, 0), 'exit', 450, 450, 200, 60, "exit")
     pygame.display.update()
