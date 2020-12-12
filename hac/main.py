@@ -21,17 +21,27 @@ def game_loop():
     enemies = pygame.sprite.Group()
     lastEnemy = pygame.time.get_ticks()
     score = 0
-    
+    counter, text = 60, '60'.rjust(3)
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+    font = pygame.font.SysFont('Consolas', 30)
+
     while hero.sprite.alive and not done:
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_pressed()
         currentTime = pygame.time.get_ticks()
-        
+
         for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                counter -= 1
+                text = str(counter).rjust(3) if counter > 0 else "Stop"
+                if text == "Stop":
+                    done = True
             if event.type == pygame.QUIT:
-                return True
+                break
+
         screen.fill(BGCOLOR)
-        
+        screen.blit(font.render(text, True, (0, 0, 0)), (350, 0))
+        clock.tick(60)
         process_keys(keys, hero)
         process_mouse(mouse, hero)
         
