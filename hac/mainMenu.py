@@ -63,7 +63,7 @@ def move_entities(hero, enemies, timeDelta):
             coinPosX = proj.pos[0]
             coinPosY = proj.pos[1]
             proj.kill()
-            if coinChance < 0.25:
+            if coinChance < 0.5:
                 coins.add(Coin((coinPosX, coinPosY)))
     return score
 
@@ -74,7 +74,6 @@ def coinUp(hero, coins):
         if reachCoin:
             coin.kill()
             value += 1
-            print(money)
     return value
 
 def render_entities(hero, enemies):
@@ -92,7 +91,7 @@ def button(x, y, w, h, action = None):
     click = pygame.mouse.get_pressed()
     mopos = pygame.mouse.get_pos()
     pygame.draw.rect(screen, (0, 0, 0), (x, y, w, h))
-    pygame.draw.rect(screen, (128, 128, 128), (x+2, y+2, w-4, h-4))  
+    pygame.draw.rect(screen, (128, 128, 128), (x+2, y+2, w-4, h-4))
     if x <= mopos[0] <= (x+w) and y <= mopos[1] <= (y+h):
         pygame.draw.rect(screen, (0, 0, 0), (x, y, w, h))
         pygame.draw.rect(screen, (230, 230, 230), (x+2, y+2, w-4, h-4))
