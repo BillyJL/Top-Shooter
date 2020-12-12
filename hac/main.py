@@ -4,6 +4,7 @@ import pygame
 import random
 from Player import Player
 from Enemy import Enemy
+from Coin import Coin
 
 
 pygame.init()
@@ -20,6 +21,7 @@ def game_loop():
     hero = pygame.sprite.GroupSingle(Player(screen.get_size()))
     enemies = pygame.sprite.Group()
     lastEnemy = pygame.time.get_ticks()
+    lastCoin = pygame.time.get_ticks()
     score = 0
     
     while hero.sprite.alive and not done:
@@ -47,17 +49,22 @@ def game_loop():
             else:
                 enemies.add(Enemy((random.randint(0, size[0]), size[1])))
             lastEnemy = currentTime
+            
+        if lastCoin < currentTime - 5000 and len(coins) < 20:
+            coins.add(Coin((random.randint(0, 800),(random.randint(0, 600)))))
+            lastCoin = currentTime
         
-        score += move_entities(hero, enemies, clock.get_time()/17)
+        move_entities(hero, enemies, clock.get_time() / 17)
+        score += coinUp(hero, coins)
         render_entities(hero, enemies)
         
         # Health and score render
         for hp in range(hero.sprite.health):
             screen.blit(healthRender, (15 + hp*35, 0))
-        scoreRender = scoreFont.render(str(score), True, pygame.Color('black'))
+        scoreRender = scoreFont.render(str(score), True, pygame.Color('gold'))
         scoreRect = scoreRender.get_rect()
-        scoreRect.right = size[0] - 20
-        scoreRect.top = 20
+        scoreRect.right = 780
+        scoreRect.top = 560
         screen.blit(scoreRender, scoreRect)
         
         pygame.display.flip()
