@@ -102,6 +102,8 @@ def game_loop():
         pygame.display.flip()
         clock.tick(120)
     if hero.sprite.alive  == 0:
+        for coin in coins:
+            coin.kill()
         store()
 done = game_loop()
 while not done:
