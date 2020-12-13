@@ -104,7 +104,7 @@ def store():
         scoreRect.top = 560
         screen.blit(scoreRender, scoreRect)
         pygame.draw.rect(screen, (0, 0, 0), (100, 100, 100, 100))
-        button((153, 153, 153), (230, 230, 230), 'back', 300, 450, 200, 60, "back")
+        button((153, 153, 153), (230, 230, 230), 'continue', 300, 450, 200, 60, "play")
         pygame.display.update()
 
 def render_entities(hero, enemies):
@@ -138,8 +138,6 @@ def button(color, activatedColor, text, x, y, w, h, action = None):
                 exec(open('main.py').read())
             elif action == "exit":
                 quit()
-            elif action == "back":
-                exec(open('main.py').read())
     draw_text(text, (0, 0, 0), (x+(w-len(text))/2), (y+30), 30)
 
 while True:
