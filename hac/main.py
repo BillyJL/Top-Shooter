@@ -6,22 +6,35 @@ from Coin import Coin
 
 pygame.init()
 
+size    = (800, 600)
 BGCOLOR = (255, 255, 255)
-
+screen = pygame.display.set_mode(size)
 scoreFont = pygame.font.Font("fonts/UpheavalPro.ttf", 30)
 healthFont = pygame.font.Font("fonts/OmnicSans.ttf", 50)
 healthRender = healthFont.render('z', True, pygame.Color('red'))
 pygame.display.set_caption("Top Down")
+costOfBoost1 = 10
+costOfBoost2 = 15
+score = 0
+done = False
+hero = pygame.sprite.GroupSingle(Player(screen.get_size()))
+enemies = pygame.sprite.Group()
+coins = pygame.sprite.Group()
+lastEnemy = 0
+score = 0
+clock = pygame.time.Clock()
 
-
+    
 def game_loop():
     done = False
+    global costOfBoost1
+    global score
     hero = pygame.sprite.GroupSingle(Player(screen.get_size()))
+    print(hero.sprite.movementSpeed)
     enemies = pygame.sprite.Group()
     lastEnemy = pygame.time.get_ticks()
     lastEnemy = pygame.time.get_ticks()
     lastCoin = pygame.time.get_ticks()
-    score = 0
     counter, text = 60, '60'.rjust(3)
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     font = pygame.font.SysFont('Consolas', 30)
@@ -30,7 +43,6 @@ def game_loop():
         keys = pygame.key.get_pressed()
         mouse = pygame.mouse.get_pressed()
         currentTime = pygame.time.get_ticks()
-
         for event in pygame.event.get():
             if event.type == pygame.USEREVENT:
                 counter -= 1
@@ -38,7 +50,7 @@ def game_loop():
                 if text == "Stop":
                     done = True
             if event.type == pygame.QUIT:
-                break
+                quit()
 
         screen.fill(BGCOLOR)
         screen.blit(font.render(text, True, (0, 0, 0)), (350, 0))
@@ -67,18 +79,29 @@ def game_loop():
         score += coinUp(hero, coins)
         render_entities(hero, enemies)
 
+    #test buttons
+        if keys[pygame.K_4]:
+            if hero.sprite.movementSpeed < 100: 
+                hero.sprite.movementSpeed += 0.1
+                score -= costOfBoost1
+                costOfBoost1 *= 1.05
+                print(costOfBoost1,  hero.sprite.movementSpeed)
+        if keys[pygame.K_5]:
+            store()
+        if keys[pygame.K_6]:
+            score = 999999999
+        
         # Health and score render
         for hp in range(hero.sprite.health):
             screen.blit(healthRender, (15 + hp * 35, 0))
+
         scoreRender = scoreFont.render(str(score), True, pygame.Color('gold'))
         scoreRect = scoreRender.get_rect()
         scoreRect.right = 780
         scoreRect.top = 560
         screen.blit(scoreRender, scoreRect)
-
         pygame.display.flip()
         clock.tick(120)
-
 
 done = game_loop()
 while not done:
@@ -92,4 +115,4 @@ while not done:
 
     if keys[pygame.K_r]:
         done = game_loop()
-pygame.quit()
+    pygame.quit()
