@@ -76,6 +76,37 @@ def coinUp(hero, coins):
             value += 1
     return value
 
+def walkingBooster():
+    global costOfBoost1
+    global score
+    click = pygame.mouse.get_pressed()
+    mopos = pygame.mouse.get_pos()
+    if 100 <= mopos[0] <= 200 and 100 <= mopos[1] <= 200:
+        if click[0] == 1:
+            if hero.sprite.movementSpeed < 10 and score > costOfBoost1:
+                hero.sprite.movementSpeed += 0.2
+                costOfBoost1 *= 1.05
+                score -= round(costOfBoost1,0)
+                print(costOfBoost1, round(hero.sprite.movementSpeed,2))
+                return round(hero.sprite.movementSpeed,2)
+
+def store():
+    while True:
+        global score
+        walkingBooster()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+        screen.fill((255, 255,255))
+        scoreRender = scoreFont.render(str(score), True, pygame.Color('gold'))
+        scoreRect = scoreRender.get_rect()
+        scoreRect.right = 780
+        scoreRect.top = 560
+        screen.blit(scoreRender, scoreRect)
+        pygame.draw.rect(screen, (0, 0, 0), (100, 100, 100, 100))
+        button((153, 153, 153), (230, 230, 230), 'back', 300, 450, 200, 60, "back")
+        pygame.display.update()
+
 def render_entities(hero, enemies):
     hero.sprite.render(screen)
     for proj in Player.projectiles:
@@ -87,8 +118,8 @@ def render_entities(hero, enemies):
     for coin in coins:
         coin.render(screen)
 
-def draw_text(text, textcolor,  x, y, fsize):
-    font = pygame.font.SysFont('arial', fsize)
+def draw_text(text, textcolor, x, y, fsize):
+    font = pygame.font.Font('freesansbold.ttf', fsize)
     text = font.render(text, True, textcolor)
     text_rect = text.get_rect()
     text_rect.center = (x, y)
@@ -107,7 +138,9 @@ def button(color, activatedColor, text, x, y, w, h, action = None):
                 exec(open('main.py').read())
             elif action == "exit":
                 quit()
-    draw_text(text, (0, 0, 0), (x+(w-len(text))/2), (y+27), 30)
+            elif action == "back":
+                exec(open('main.py').read())
+    draw_text(text, (0, 0, 0), (x+(w-len(text))/2), (y+30), 30)
 
 while True:
     click = pygame.mouse.get_pressed()
