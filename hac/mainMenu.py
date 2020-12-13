@@ -76,35 +76,28 @@ def coinUp(hero, coins):
             value += 1
     return value
 
-def walkingBooster():
-    global costOfBoost1
-    global score
-    click = pygame.mouse.get_pressed()
-    mopos = pygame.mouse.get_pos()
-    if 100 <= mopos[0] <= 200 and 100 <= mopos[1] <= 200:
-        if click[0] == 1:
-            if hero.sprite.movementSpeed < 10 and score > costOfBoost1:
-                hero.sprite.movementSpeed += 0.2
-                costOfBoost1 *= 1.05
-                score -= round(costOfBoost1,0)
-                print(costOfBoost1, round(hero.sprite.movementSpeed,2))
-                return round(hero.sprite.movementSpeed,2)
-
-def store():
+def scoreMenu():
     while True:
         global score
-        walkingBooster()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
+        if score < 5:
+            yourLevel = "Wasted"
+        if 5 <= score < 10:
+            yourLevel = "You`re too weak"
+        if 10 <= score < 20:
+            yourLevel = "You`re not bad"
+        if 20 <= score < 30:
+            yourLevel = "Damn, son"
+        if 30 <= score < 40:
+            yourLevel = "You`re dundeon master"
+        if 40 <= score:
+            yourLevel = "You`re PRO MLG gamer"
         screen.fill((255, 255,255))
-        scoreRender = scoreFont.render(str(score), True, pygame.Color('gold'))
-        scoreRect = scoreRender.get_rect()
-        scoreRect.right = 780
-        scoreRect.top = 560
-        screen.blit(scoreRender, scoreRect)
-        pygame.draw.rect(screen, (0, 0, 0), (100, 100, 100, 100))
-        button((153, 153, 153), (230, 230, 230), 'continue', 300, 450, 200, 60, "play")
+        draw_text(yourLevel, (153, 0, 0), 400+len(yourLevel)/2, 100, 50)
+        draw_text(str(score), (153, 0, 0), 400+len(str(score))/2, 200, 50)
+        button((153, 153, 153), (230, 230, 230), 'try again', 300, 450, 200, 60, "play")
         pygame.display.update()
 
 def render_entities(hero, enemies):
