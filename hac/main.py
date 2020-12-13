@@ -46,8 +46,8 @@ def game_loop():
             if event.type == pygame.USEREVENT:
                 counter -= 1
                 text = str(counter).rjust(3) if counter > 0 else "Stop"
-                if text == "Stop":
-                    store()
+                #if text == "Stop":
+                    #scoreMenu()
             if event.type == pygame.QUIT:
                 quit()
 
@@ -85,10 +85,8 @@ def game_loop():
                 score -= costOfBoost1
                 costOfBoost1 *= 1.05
                 print(costOfBoost1,  hero.sprite.movementSpeed)
-        if keys[pygame.K_5]:
-            store()
         if keys[pygame.K_6]:
-            score = 999999999
+            score += 5
         
         # Health and score render
         for hp in range(hero.sprite.health):
@@ -104,7 +102,10 @@ def game_loop():
     if hero.sprite.alive  == 0:
         for coin in coins:
             coin.kill()
-        store()
+        pygame.mixer.music.load('wasted.mp3')
+        pygame.mixer.music.play()
+        scoreMenu()
+
 done = game_loop()
 while not done:
     keys = pygame.key.get_pressed()
