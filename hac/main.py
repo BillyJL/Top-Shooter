@@ -21,7 +21,6 @@ hero = pygame.sprite.GroupSingle(Player(screen.get_size()))
 enemies = pygame.sprite.Group()
 coins = pygame.sprite.Group()
 lastEnemy = 0
-score = 0
 clock = pygame.time.Clock()
 
     
@@ -81,7 +80,7 @@ def game_loop():
 
     #test buttons
         if keys[pygame.K_4]:
-            if hero.sprite.movementSpeed < 100: 
+            if hero.sprite.movementSpeed < 25: 
                 hero.sprite.movementSpeed += 0.1
                 score -= costOfBoost1
                 costOfBoost1 *= 1.05
@@ -102,7 +101,8 @@ def game_loop():
         screen.blit(scoreRender, scoreRect)
         pygame.display.flip()
         clock.tick(120)
-
+    if hero.sprite.alive  == 0:
+        store()
 done = game_loop()
 while not done:
     keys = pygame.key.get_pressed()
