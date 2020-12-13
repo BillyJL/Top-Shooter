@@ -34,7 +34,7 @@ def game_loop():
     lastEnemy = pygame.time.get_ticks()
     lastEnemy = pygame.time.get_ticks()
     lastCoin = pygame.time.get_ticks()
-    counter, text = 60, '60'.rjust(3)
+    counter, text = 1, '60'.rjust(3)
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     font = pygame.font.SysFont('Consolas', 30)
 
@@ -47,7 +47,7 @@ def game_loop():
                 counter -= 1
                 text = str(counter).rjust(3) if counter > 0 else "Stop"
                 if text == "Stop":
-                    done = True
+                    store()
             if event.type == pygame.QUIT:
                 quit()
 
